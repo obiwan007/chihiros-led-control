@@ -75,6 +75,19 @@ def create_manual_setting_command(
     """
     return _create_command_encoding(90, 7, msg_id, [color, brightness_level])
 
+def create_pump_command(
+    msg_id: tuple[int, int], volume: int
+) -> bytearray:
+    """Set Pump.
+
+    param: color: 0-2 (0 is red, 1 is green, 2 is blue; on non-RGB models, 0 is white)
+    param: brightness_level: 0 - 100
+    """
+    print("Pumping", volume, msg_id)
+    return _create_command_encoding(0Xa5, 0X1b, msg_id, [0,0,0,0,volume])
+
+
+
 
 def create_add_auto_setting_command(
     msg_id: tuple[int, int],

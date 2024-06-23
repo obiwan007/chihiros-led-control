@@ -52,4 +52,5 @@ __all__ = [
     "CODE2MODEL",
     "get_device_from_address",
     "get_model_class_from_name",
+    "pump",
 ]

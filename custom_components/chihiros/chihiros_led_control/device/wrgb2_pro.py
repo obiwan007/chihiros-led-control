@@ -8,6 +8,7 @@ class WRGBIIPro(BaseDevice):
 
     _model_name = "WRGB II Pro"
     _model_codes = [
+        "DYDOSE",        
         "DYWPRO30",
         "DYWPRO45",
         "DYWPRO60",

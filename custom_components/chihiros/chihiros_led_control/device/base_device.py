@@ -145,11 +145,29 @@ class BaseDevice(ABC):
         )
         await self._send_command(cmd, 3)
 
+    async def set_pump(
+        self, volume       
+    ) -> None:
+        """Set Pump."""
+        cmd = commands.create_pump_command(
+            self.get_next_msg_id(), volume
+        )
+        print ("Bytearray", cmd)
+        print ("Volumne", volume)
+        await self._send_command(cmd, 3)
+
     async def set_brightness(
         self, brightness: Annotated[int, typer.Argument(min=0, max=100)]
     ) -> None:
         """Set light brightness."""
         await self.set_color_brightness(brightness)
+
+
+    async def pump(
+        self, volume: Annotated[int, typer.Option(min=0, max=150)] = 0,
+    ) -> None:
+        """Executing Set Pump."""        
+        await self.set_pump(10)
 
     async def set_rgb_brightness(
         self, brightness: Annotated[tuple[int, int, int], typer.Argument()]
@@ -261,6 +279,7 @@ class BaseDevice(ABC):
         self, commands: list[bytes], retry: int | None = None
     ) -> None:
         """Send command to device and read response."""
+        print("Commands", [command.hex() for command in commands])
         self._logger.debug(
             "%s: Sending commands %s",
             self.name,

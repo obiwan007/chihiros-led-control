@@ -25,6 +25,7 @@ def _run_device_func(device_address: str, **kwargs: Any) -> None:
 
     async def _async_func() -> None:
         dev = await get_device_from_address(device_address)
+        print(f"{dev.__class__.__name__} running {command_name}")
         if hasattr(dev, command_name):
             await getattr(dev, command_name)(**kwargs)
         else:
@@ -45,8 +46,11 @@ def list_devices(timeout: Annotated[int, typer.Option()] = 5) -> None:
     for device in discovered_devices:
         model_name = "???"
         if device.name is not None:
+            print("Name:"+device.name[:-12] )
             model_class = get_model_class_from_name(device.name)
-            if model_class.model_code:  # type: ignore
+            print("Class:"+model_class.model_name )
+        
+            if model_class.model_name:  # type: ignore
                 model_name = model_class.model_name  # type: ignore
         table.add_row(device.name, device.address, model_name)
     print("Discovered the following devices:")
@@ -56,6 +60,7 @@ def list_devices(timeout: Annotated[int, typer.Option()] = 5) -> None:
 @app.command()
 def turn_on(device_address: str) -> None:
     """Turn on a light."""
+    print("Turn on "+device_address)
     _run_device_func(device_address)
 
 
@@ -64,6 +69,12 @@ def turn_off(device_address: str) -> None:
     """Turn off a light."""
     _run_device_func(device_address)
 
+@app.command()
+def pump(device_address: str,
+         volume: int,
+    ) -> None:
+    """Pump a bit."""
+    _run_device_func(device_address) 
 
 @app.command()
 def set_color_brightness(
